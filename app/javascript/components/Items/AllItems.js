@@ -1,32 +1,20 @@
 import React from "react"
-import axios from 'axios'
 
 class AllItems extends React.Component {
 
+/*
   constructor(props) {
     super(props);
+    //console.log('AllItems.constructor', props)
     this.state = {
-      items: []
+      items: props.items
     };
   }
-  
-  componentDidMount() {
-    console.log("Component mounted, fetching items..");    
-    axios.get('/api/v1/items.json')
-      .then ( resp => {
-          console.log(resp) 
-          this.setState({items: resp.data})
-            console.log("..done");           
-          })//setAirlines (resp.data.data) )
-      .catch( resp => console.log(resp) )    
+*/
 
-    
-//    $.getJSON('/api/v1/items.json', (response) => { this.setState({ items: response }) });
-    
-  }
-
-  render() {
-    var div_items=this.state.items.map( (item) => {
+  render(props) {
+    console.log('AllItems.render', this.props)
+    var div_items=this.props.items.map( (item) => {
       return(
         <div key={item.id}> 
           <h3>{item.name}</h3>
