@@ -73,18 +73,38 @@ class Body extends React.Component {
  
   handleEdit(item) {
     console.log('Body.handleEdit', item);
-
-    axios.patch(`/api/v1/items/${item.id}`, item) 
+    var item_data = item
+    //removing ID from data as not allowed in controller update
+    var item_id = item.id
+    delete item_data['id']
+    //console.log('item_data', item_data)
+    
+    axios.patch(`/api/v1/items/${item_id}`, item_data) 
       .then(resp => {
           console.log('Body.handleEdit after patch..', resp);
           
           var updated_item = resp.data
           
-          //var i = this.state.items.indexOf(item)     
+          //var i = this.state.items.indexOf(item)  
+          
+          //var newState = {...this.state.items}
+          var newState = this.state.items
+          
+          for (var i in newState) {
+            if (newState[i].id == updated_item.id) {
+              console.log('for loop, i=', i); 
+              newState[i] = updated_item
+            }
+          }
+ 
+          console.log('newState', newState)
+      
+          /* //Replace using with filter+push.. Item is moved down the list
           var newState = this.state.items.filter((item) => {
             return item.id != updated_item.id;
           });
           newState.push(updated_item);
+          */
           //console.log('Body.handleSubmit newState', newState);       
           this.setState({items: newState});
         })

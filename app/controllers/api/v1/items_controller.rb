@@ -20,7 +20,7 @@ class Api::V1::ItemsController < Api::V1::BaseController
 
   def update
     item = Item.find(params["id"])
-    item.update_attributes(item_params)
+    item.update(item_params)
     render json: item
   end
 
