@@ -1,24 +1,35 @@
 import React from "react"
+import Item from "./Item"
+
 
 class AllItems extends React.Component {
 
-/*
   constructor(props) {
     super(props);
-    //console.log('AllItems.constructor', props)
-    this.state = {
-      items: props.items
-    };
+
+    this.handleDelete = this.handleDelete.bind(this); 
+    this.handleEdit = this.handleEdit.bind(this); 
   }
-*/
+
+  handleDelete(item_id) {
+    console.log('AllItems.handleDelete', item_id);
+    this.props.handleDelete(item_id);
+  }
+
+  handleEdit(item) {
+    console.log('AllItems.handleEdit', item);
+    this.props.handleEdit(item);
+  }  
 
   render(props) {
     console.log('AllItems.render', this.props)
     var div_items=this.props.items.map( (item) => {
       return(
         <div key={item.id}> 
-          <h3>{item.name}</h3>
-          <p>{item.description}</p>
+          <Item item={item}
+             handleDelete={this.handleDelete.bind(this, item.id)}
+             handleEdit={this.handleEdit}
+          />
         </div>      
       )
     });

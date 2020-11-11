@@ -13,6 +13,8 @@ class Body extends React.Component {
     };
     
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
   }  
   
   componentDidMount() {
@@ -52,12 +54,54 @@ class Body extends React.Component {
     //this.setState({ items: newState })
   }
   
+  handleDelete(item_id) {
+    console.log('Body.handleDelete', item_id);  
+    
+    axios.delete(`/api/v1/items/${item_id}`) 
+      .then(resp => {
+          console.log('Body.handleDelete after post', resp);
+          var newState = this.state.items.filter((item) => {
+            return item.id != item_id;
+          });
+          //console.log('Body.handleSubmit newState', newState);       
+          this.setState({items: newState});
+        })
+      .catch(resp => {console.log(resp)})
+    console.log('..done!')    
+  }
+
+ 
+  handleEdit(item) {
+    console.log('Body.handleEdit', item);
+
+    axios.patch(`/api/v1/items/${item.id}`, item) 
+      .then(resp => {
+          console.log('Body.handleEdit after patch..', resp);
+          
+          var updated_item = resp.data
+          
+          //var i = this.state.items.indexOf(item)     
+          var newState = this.state.items.filter((item) => {
+            return item.id != updated_item.id;
+          });
+          newState.push(updated_item);
+          //console.log('Body.handleSubmit newState', newState);       
+          this.setState({items: newState});
+        })
+      .catch(resp => {console.log(resp)})
+    console.log('..update done!')      
+    
+  }
+
   render () {
     return (
       <div className="Body">
         <h2>Hello, World from Body Component!</h2>
         <NewItem onSubmitNewItem={this.handleSubmit}/>        
-        <AllItems items={this.state.items}/>
+        <AllItems items={this.state.items} 
+                  handleDelete={this.handleDelete}
+                  handleEdit={this.handleEdit}
+        />
       </div>
     );
   }

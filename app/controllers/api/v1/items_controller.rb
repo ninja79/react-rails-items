@@ -1,20 +1,27 @@
 class Api::V1::ItemsController < Api::V1::BaseController
   def index
-    respond_with Item.all
+    render json: Item.all
   end
 
   def create
-    respond_with :api, :v1, Item.create(item_params)
+    render json: Item.create(item_params)
   end
 
   def destroy
-    respond_with Item.destroy(params[:id])
+     item = Item.find_by(id: params[:id])
+
+    if item.destroy
+      head :no_content
+    else
+      render json: { error: item.errors.messages }, status: 422
+    end
+    #render json: Item.destroy(params[:id])
   end
 
   def update
     item = Item.find(params["id"])
     item.update_attributes(item_params)
-    respond_with item, json: item
+    render json: item
   end
 
   private
