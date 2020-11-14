@@ -56,18 +56,16 @@ class Items extends React.Component {
       
     return (
         <div key={item.id}> 
-          <h3>
-            {tag_name}
-            {tag_description}
-            {
-              this.state.is_edit_ongoing?
-                (<button onClick={this.handleUndoEdit.bind(this)}>Cancel</button>)       
-                : (' ')         
-            }
+          {tag_name}
+          {tag_description}
+          {
+            this.state.is_edit_ongoing?
+              (<button className="btn btn-basic" onClick={this.handleUndoEdit.bind(this)}>Cancel</button>)       
+              : (' ')         
+          }
 
-            <button className="badge badge-primary mr-2" onClick={this.handleEditClick.bind(this)}>{edit_submit_toggle}</button>
-            <button onClick={this.handleDeleteClick.bind(this, item.id)}>Delete</button>
-          </h3>
+          <button className="btn btn-primary" onClick={this.handleEditClick.bind(this)}>{edit_submit_toggle}</button>
+          <button className="btn btn-danger" onClick={this.handleDeleteClick.bind(this, item.id)}>Delete</button>
         </div>  
     )
   }
