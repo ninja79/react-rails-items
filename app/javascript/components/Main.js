@@ -6,7 +6,6 @@ class Main extends React.Component {
   render () {
     return (
       <div>
-        <h2>Hello, World from Main Component!</h2>
         <Header />
         <Body />        
       </div>

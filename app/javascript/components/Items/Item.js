@@ -9,6 +9,7 @@ class Items extends React.Component {
     };
     this.handleDeleteClick = this.handleDeleteClick.bind(this); 
     this.handleEditClick = this.handleEditClick.bind(this); 
+    this.handleUndoEdit = this.handleUndoEdit.bind(this);
   }
 
   handleDeleteClick(item_id) {
@@ -31,7 +32,13 @@ class Items extends React.Component {
     }
     
     this.setState({is_edit_ongoing: !this.state.is_edit_ongoing});
-  }  
+  } 
+
+  handleUndoEdit(e) {
+    console.log('Items.handleUndoEdit', e);
+
+    this.setState({is_edit_ongoing: !this.state.is_edit_ongoing});
+  } 
 
   render(props){
     var item = this.props.item
@@ -44,14 +51,21 @@ class Items extends React.Component {
       <input type='text' ref='description' defaultValue={this.props.item.description} />
       :
       <em>{item.description}</em>       
-      
+    
+    var edit_submit_toggle = this.state.is_edit_ongoing? 'Submit' : 'Edit'
       
     return (
         <div key={item.id}> 
           <h3>
             {tag_name}
             {tag_description}
-            <button onClick={this.handleEditClick.bind(this)}>Edit</button>
+            {
+              this.state.is_edit_ongoing?
+                (<button onClick={this.handleUndoEdit.bind(this)}>Cancel</button>)       
+                : (' ')         
+            }
+
+            <button className="badge badge-primary mr-2" onClick={this.handleEditClick.bind(this)}>{edit_submit_toggle}</button>
             <button onClick={this.handleDeleteClick.bind(this, item.id)}>Delete</button>
           </h3>
         </div>  

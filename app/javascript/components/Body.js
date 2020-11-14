@@ -79,34 +79,43 @@ class Body extends React.Component {
     delete item_data['id']
     //console.log('item_data', item_data)
     
+    console.log('this.state.items in handleEdit', this.state)
+    
     axios.patch(`/api/v1/items/${item_id}`, item_data) 
       .then(resp => {
           console.log('Body.handleEdit after patch..', resp);
           
-          var updated_item = resp.data
+          var updated_item = resp.data;
           
           //var i = this.state.items.indexOf(item)  
+         
+          //var newState = Object.assign({}, this.state);
+          var newState = {...this.state}          
           
-          //var newState = {...this.state.items}
-          var newState = this.state.items
-          
-          for (var i in newState) {
-            if (newState[i].id == updated_item.id) {
+          //console.log('newState before update', newState)
+          //console.log('this.state.items before update', this.state.items)
+
+          for (var i in newState.items) {
+            if (newState.items[i].id == updated_item.id) {
               console.log('for loop, i=', i); 
-              newState[i] = updated_item
+              newState.items[i] = updated_item
             }
           }
  
-          console.log('newState', newState)
-      
-          /* //Replace using with filter+push.. Item is moved down the list
-          var newState = this.state.items.filter((item) => {
-            return item.id != updated_item.id;
-          });
-          newState.push(updated_item);
-          */
-          //console.log('Body.handleSubmit newState', newState);       
-          this.setState({items: newState});
+          //console.log('newState after update', newState)
+          //console.log('this.state.items after update', this.state.items)
+/*    
+          //Replace using with filter+push.. Item is moved down the list
+          //var newState = this.state.items.filter((item) => {
+          //  return item.id != updated_item.id;
+          //});
+          //newState.push(updated_item);
+          
+          //console.log('Body.handleSubmit newState', newState);                 
+*/
+          
+          //Perform a state update to refresh content 
+          this.setState({items: newState.items});
         })
       .catch(resp => {console.log(resp)})
     console.log('..update done!')      
@@ -116,7 +125,6 @@ class Body extends React.Component {
   render () {
     return (
       <div className="Body">
-        <h2>Hello, World from Body Component!</h2>
         <NewItem onSubmitNewItem={this.handleSubmit}/>        
         <AllItems items={this.state.items} 
                   handleDelete={this.handleDelete}
