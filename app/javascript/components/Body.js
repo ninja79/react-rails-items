@@ -2,6 +2,7 @@ import React from "react"
 import axios from 'axios'
 import AllItems from './Items/AllItems'
 import NewItem from './Items/NewItem'
+import Toast from './Toast'
 
 class Body extends React.Component {
 
@@ -9,12 +10,16 @@ class Body extends React.Component {
     super(props);
     //console.log('Body.constructor', props)
     this.state = {
-      items: []
+      items: [],
+      toasts: []
     };
-    
+    //{id:9090, header:'Toast from Body', msg:'Toast creato dalla pagina Body'}
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+
+    this.handleToastDelete = this.handleToastDelete.bind(this);
+
   }  
   
   componentDidMount() {
@@ -24,7 +29,7 @@ class Body extends React.Component {
           console.log(resp) 
           //var newState = this.state.items.concat(item)
           this.setState({items: resp.data})
-            console.log("..done");           
+            console.log("..done"); //, 'this.state', this.state);           
           })//setAirlines (resp.data.data) )
       .catch( resp => console.log('Something went wrong..', resp) )    
 
@@ -49,6 +54,8 @@ class Body extends React.Component {
         })
       .catch(resp => {console.log(resp)})
     console.log('..done!')
+
+    this.show_toast({header:'New item', msg:'New item added succesfully'});
         
     //var newState = this.state.items.concat(item);
     //this.setState({ items: newState })
@@ -68,6 +75,8 @@ class Body extends React.Component {
         })
       .catch(resp => {console.log(resp)})
     console.log('..done!')    
+
+    this.show_toast({header:'Deleted item', msg:'Item has been deleted'});    
   }
 
  
@@ -120,11 +129,25 @@ class Body extends React.Component {
       .catch(resp => {console.log(resp)})
     console.log('..update done!')      
     
+    this.show_toast({header:'Modified item', msg:'Item has been updated'});    
+
+  };
+
+  handleToastDelete(toast_id) {
+    console.log('Body.handleToastDelete', toast_id);  
+    
+    var newToasts = this.state.toasts.filter((t) => {
+            return t.id != toast_id;
+          });
+    this.setState({toasts: newToasts});
   }
 
   render () {
     return (
       <div className="Body">
+        <Toast toasts={this.state.toasts} 
+               handleDelete={this.handleToastDelete} 
+        />      
         <NewItem onSubmitNewItem={this.handleSubmit}/>        
         <AllItems items={this.state.items} 
                   handleDelete={this.handleDelete}
@@ -132,7 +155,28 @@ class Body extends React.Component {
         />
       </div>
     );
-  }
+  };
+
+  //SERVICE FUNCTIONS
+  show_toast(toast) {
+    var newState = {...this.state};
+
+    //generate a unique id
+    const d = new Date();
+    toast['id'] =` toast_${d.getTime()}`;
+    console.log('show_toast->newState', newState, 'toast:', toast);
+
+    //add the new toast to the current state
+    var newToasts = newState.toasts.concat(toast);
+    this.setState({toasts: newToasts});
+    console.log('show_toast->newToasts 2', newToasts);    
+
+    //setting timer to autodelete toast (if managed via State it cannot fade on its own)
+    console.log('set toast delete timer..', toast['id']); 
+    setTimeout(function(){ this.handleToastDelete(toast['id']); }, 3000);
+  };
+
+
 };
 
 export default Body

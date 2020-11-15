@@ -46,28 +46,34 @@ class Items extends React.Component {
     var tag_name = this.state.is_edit_ongoing?
       <input type='text' ref='name' defaultValue={this.props.item.name} />
       :
-      <em>{item.name} - </em> 
+      <span>{item.name}</span>
     var tag_description = this.state.is_edit_ongoing?
       <input type='text' ref='description' defaultValue={this.props.item.description} />
       :
-      <em>{item.description}</em>       
+      <span>{item.description}</span>
     
     var edit_submit_toggle = this.state.is_edit_ongoing? 'Submit' : 'Edit'
-      
-    return (
-        <div key={item.id}> 
-          {tag_name}
-          {tag_description}
-          {
-            this.state.is_edit_ongoing?
-              (<button className="btn btn-basic" onClick={this.handleUndoEdit.bind(this)}>Cancel</button>)       
-              : (' ')         
-          }
 
-          <button className="btn btn-primary" onClick={this.handleEditClick.bind(this)}>{edit_submit_toggle}</button>
-          <button className="btn btn-danger" onClick={this.handleDeleteClick.bind(this, item.id)}>Delete</button>
-        </div>  
-    )
+    return (
+        <tr key={item.id} scope="row"> 
+          <td>
+            {tag_name}
+          </td>
+          <td>
+            {tag_description}
+          </td>
+          <td>
+            {
+              this.state.is_edit_ongoing?
+                (<button className="btn btn-dark btn-sm mx-2" onClick={this.handleUndoEdit.bind(this)}>Cancel</button>)       
+                : (' ')         
+            }
+
+            <button className="btn btn-primary btn-sm mx-2" onClick={this.handleEditClick.bind(this)}>{edit_submit_toggle}</button>
+            <button className="btn btn-danger btn-sm mx-2" onClick={this.handleDeleteClick.bind(this, item.id)}>Delete</button>
+          </td>
+        </tr>  
+    )  
   }
 }
 

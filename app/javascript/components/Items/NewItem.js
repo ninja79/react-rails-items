@@ -17,7 +17,7 @@ class NewItem extends React.Component {
   handleInputChange(event) {
     event.preventDefault();
     const { name, value } = event.target;
-    console.log('event', event, 'name:', name, 'value:', value);
+    //console.log('event', event, 'name:', name, 'value:', value);
     this.setState({ ...this.state, [name]: value });
   };
 

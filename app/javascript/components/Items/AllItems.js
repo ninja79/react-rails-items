@@ -25,20 +25,26 @@ class AllItems extends React.Component {
     console.log('AllItems.render', this.props)
     var div_items=this.props.items.map( (item) => {
       return(
-        <div key={item.id}> 
           <Item item={item}
              handleDelete={this.handleDelete.bind(this, item.id)}
              handleEdit={this.handleEdit}
-          />
-        </div>      
+          />  
       )
     });
-    
+
     return (
-      <div>
-        <h1>All items component</h1>
-        {div_items}
-      </div>
+      <table className='table table-sm table-hover'>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {div_items}
+        </tbody>
+      </table>
     );
   }
 };
